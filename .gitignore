@@ -36,6 +36,7 @@
 Debug/
 Release/
 x64/
+ProductionRelease/
 
 # Other VS files
 *.sln
