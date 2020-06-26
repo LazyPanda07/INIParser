@@ -224,10 +224,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="INIParser.h" />
+    <ClInclude Include="src\INIParser.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="INIParser.cpp" />
+    <ClCompile Include="src\INIParser.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
