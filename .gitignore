@@ -33,7 +33,14 @@
 
 # VS folders
 .vs/
+<<<<<<< HEAD
 bin/
+=======
+Debug/
+Release/
+x64/
+ProductionRelease/
+>>>>>>> 36d5c1925124c34df0a0b2f73448b89297538eaa
 
 # Other VS files
 *.sln
