@@ -22,8 +22,6 @@ namespace utility
 	public:
 		INIParser(const std::string_view& fileName);
 
-		INIParser(const std::string& fileName);
-
 		INIParser(const std::filesystem::path& fileName);
 
 		INIParser(std::ifstream&& file) noexcept;

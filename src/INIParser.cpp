@@ -47,11 +47,6 @@ namespace utility
 		this->parse(ifstream(fileName));
 	}
 
-	INIParser::INIParser(const string& fileName)
-	{
-		this->parse(ifstream(fileName));
-	}
-
 	INIParser::INIParser(const filesystem::path& fileName)
 	{
 		this->parse(ifstream(fileName));
