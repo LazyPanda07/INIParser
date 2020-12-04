@@ -62,7 +62,7 @@ namespace utility
 		return data;
 	}
 
-	const unordered_multimap<string, string>& INIParser::getSection(const string& sectionName) const
+	const unordered_map<string, string>& INIParser::getSection(const string& sectionName) const
 	{
 		return data.find(sectionName)->second;
 	}
