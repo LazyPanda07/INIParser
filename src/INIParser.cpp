@@ -7,14 +7,26 @@ namespace utility
 	void INIParser::parse(ifstream&& file)
 	{
 		string sectionName;
+		string tem;
 
-		while (!file.eof())
+		while (getline(file, tem))
 		{
-			string tem;
+			size_t isStringValue = tem.find('\"');
+			string key;
+			string value;
 
-			getline(file, tem);
+			if (isStringValue == string::npos)
+			{
+				tem.erase(remove_if(tem.begin(), tem.end(), [](const char& c) { return isspace(c); }), tem.end());
+			}
+			else
+			{
+				tem.erase(remove_if(tem.begin(), tem.begin() + tem.find('\"'), [](const char& c) {return isspace(c); }), tem.begin() + tem.find('\"'));
 
-			if (tem == "")
+				tem.erase(remove(tem.begin(), tem.end(), '\"'), tem.end());
+			}
+
+			if (tem.empty())
 			{
 				continue;
 			}
@@ -29,12 +41,27 @@ namespace utility
 					break;
 
 				case '[':
-					sectionName = string(begin(tem) + 1, end(tem) - 1);
+					sectionName = string(tem.begin() + 1, tem.end() - 1);
 
 					break;
 
 				default:
-					data[sectionName].emplace(make_pair(tem.substr(0, tem.find('=')), tem.substr(tem.find('=') + 1)));
+					key = tem.substr(0, tem.find('='));
+					value = tem.substr(tem.find('=') + 1);
+
+					{
+						size_t isArray = key.find("[]");
+
+						if (isArray != string::npos)
+						{
+							key.pop_back();
+
+							key.pop_back();
+						}
+					}
+					
+
+					data[sectionName].emplace(make_pair(move(key), move(value)));
 
 					break;
 				}
@@ -62,7 +89,7 @@ namespace utility
 		return data;
 	}
 
-	const unordered_map<string, string>& INIParser::getSection(const string& sectionName) const
+	const unordered_multimap<string, string>& INIParser::getSection(const string& sectionName) const
 	{
 		return data.find(sectionName)->second;
 	}

@@ -11,7 +11,7 @@ namespace utility
 	class INIParser
 	{
 	public:
-		using iniStructure = std::unordered_map<std::string, std::unordered_map<std::string, std::string>>;	//section name - key(name=value)
+		using iniStructure = std::unordered_map<std::string, std::unordered_multimap<std::string, std::string>>;	//section name - key(name=value)
 
 	private:
 		iniStructure data;
@@ -28,7 +28,7 @@ namespace utility
 
 		const iniStructure& get() const;
 
-		const std::unordered_map<std::string, std::string>& getSection(const std::string& sectionName) const;
+		const std::unordered_multimap<std::string, std::string>& getSection(const std::string& sectionName) const;
 
 		std::string getKeyValue(const std::string& sectionName, const std::string& keyName) const;
 
