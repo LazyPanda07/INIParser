@@ -50,16 +50,30 @@ namespace utility
 					value = tem.substr(tem.find('=') + 1);
 
 					{
-						size_t isArray = key.find("[]");
+						size_t isMap = key.find('[');
 
-						if (isArray != string::npos)
+						if (isMap != string::npos)
 						{
-							key.pop_back();
+							if (key[isMap + 1] != ']')
+							{
+								string mapName(key.begin(), key.begin() + isMap);
+								
+								key.erase(key.begin(), key.begin() + isMap + 1);
 
-							key.pop_back();
+								key.pop_back();
+
+								mapData[sectionName][mapName].emplace(move(key), move(value));
+
+								continue;
+							}
+							else
+							{
+								key.pop_back();
+
+								key.pop_back();
+							}
 						}
 					}
-					
 
 					data[sectionName].emplace(make_pair(move(key), move(value)));
 

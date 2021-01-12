@@ -12,9 +12,11 @@ namespace utility
 	{
 	public:
 		using iniStructure = std::unordered_map<std::string, std::unordered_multimap<std::string, std::string>>;	//section name - key(name=value)
+		using iniMapStructure = std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::string>>>;	//section name - map of maps
 
 	private:
 		iniStructure data;
+		iniMapStructure mapData;
 
 	private:
 		void parse(std::ifstream&& file);
