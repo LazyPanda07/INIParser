@@ -28,11 +28,17 @@ namespace utility
 
 		INIParser(std::ifstream&& file) noexcept;
 
-		const iniStructure& get() const;
+		const iniStructure& getData() const;
 
-		const std::unordered_multimap<std::string, std::string>& getSection(const std::string& sectionName) const;
+		const iniMapStructure& getMapData() const;
 
-		std::string getKeyValue(const std::string& sectionName, const std::string& keyName) const;
+		const std::unordered_multimap<std::string, std::string>& getSectionData(const std::string& sectionName) const;
+
+		const std::unordered_map<std::string, std::string>& getSectionMapData(const std::string& sectionName, const std::string& mapName) const;
+
+		std::string getKeyValueData(const std::string& sectionName, const std::string& keyName) const;
+
+		std::string getKeyValueMapData(const std::string& sectionName, const std::string& mapName, const std::string& keyName) const;
 
 		INIParser() = default;
 	};

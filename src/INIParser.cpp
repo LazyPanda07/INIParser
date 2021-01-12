@@ -98,18 +98,33 @@ namespace utility
 		this->parse(move(file));
 	}
 
-	const INIParser::iniStructure& INIParser::get() const
+	const INIParser::iniStructure& INIParser::getData() const
 	{
 		return data;
 	}
 
-	const unordered_multimap<string, string>& INIParser::getSection(const string& sectionName) const
+	const INIParser::iniMapStructure& INIParser::getMapData() const
 	{
-		return data.find(sectionName)->second;
+		return mapData;
 	}
 
-	string INIParser::getKeyValue(const string& sectionName, const string& keyName) const
+	const unordered_multimap<string, string>& INIParser::getSectionData(const string& sectionName) const
+	{
+		return data.at(sectionName);
+	}
+
+	const unordered_map<string, string>& INIParser::getSectionMapData(const string& sectionName, const string& mapName) const
+	{
+		return mapData.at(sectionName).at(mapName);
+	}
+
+	string INIParser::getKeyValueData(const string& sectionName, const string& keyName) const
 	{
 		return data.find(sectionName)->second.find(keyName)->second;
+	}
+
+	string INIParser::getKeyValueMapData(const string& sectionName, const string& mapName, const string& keyName) const
+	{
+		return mapData.at(sectionName).at(mapName).at(keyName);
 	}
 }
