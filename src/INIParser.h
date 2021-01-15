@@ -12,7 +12,8 @@ namespace utility
 	{
 	public:
 		using iniStructure = std::unordered_map<std::string, std::unordered_multimap<std::string, std::string>>;	//section name - key(name=value)
-		using iniMapStructure = std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::string>>>;	//section name - map of maps
+		using iniMapStructure = std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_multimap<std::string, std::string>>>;	//section name - map of maps
+		using iniMapStructureGetStruct = std::pair<std::unordered_map<std::string, std::string>::const_iterator, std::unordered_map<std::string, std::string>::const_iterator>;	//std::unordered_multimap.equal_range()
 
 	private:
 		iniStructure data;
@@ -34,11 +35,11 @@ namespace utility
 
 		const std::unordered_multimap<std::string, std::string>& getSectionData(const std::string& sectionName) const;
 
-		const std::unordered_map<std::string, std::string>& getSectionMapData(const std::string& sectionName, const std::string& mapName) const;
+		const std::unordered_multimap<std::string, std::string>& getSectionMapData(const std::string& sectionName, const std::string& mapName) const;
 
 		std::string getKeyValueData(const std::string& sectionName, const std::string& keyName) const;
 
-		std::string getKeyValueMapData(const std::string& sectionName, const std::string& mapName, const std::string& keyName) const;
+		iniMapStructureGetStruct getKeyValueMapData(const std::string& sectionName, const std::string& mapName, const std::string& keyName) const;
 
 		INIParser() = default;
 	};

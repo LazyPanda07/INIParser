@@ -113,7 +113,7 @@ namespace utility
 		return data.at(sectionName);
 	}
 
-	const unordered_map<string, string>& INIParser::getSectionMapData(const string& sectionName, const string& mapName) const
+	const unordered_multimap<string, string>& INIParser::getSectionMapData(const string& sectionName, const string& mapName) const
 	{
 		return mapData.at(sectionName).at(mapName);
 	}
@@ -123,8 +123,8 @@ namespace utility
 		return data.find(sectionName)->second.find(keyName)->second;
 	}
 
-	string INIParser::getKeyValueMapData(const string& sectionName, const string& mapName, const string& keyName) const
+	INIParser::iniMapStructureGetStruct INIParser::getKeyValueMapData(const string& sectionName, const string& mapName, const string& keyName) const
 	{
-		return mapData.at(sectionName).at(mapName).at(keyName);
+		return mapData.at(sectionName).at(mapName).equal_range(keyName);
 	}
 }
