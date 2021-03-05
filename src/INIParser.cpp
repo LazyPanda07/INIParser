@@ -17,7 +17,7 @@ namespace utility
 
 			if (isStringValue == string::npos)
 			{
-				tem.erase(remove_if(tem.begin(), tem.end(), [](const char& c) { return isspace(c); }), tem.end());
+				tem.erase(remove_if(tem.begin(), tem.end(), [](const char& c) { return isspace(static_cast<unsigned char>(c)); }), tem.end());
 			}
 			else
 			{
