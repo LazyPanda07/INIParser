@@ -23,9 +23,9 @@ namespace utility
 		void parse(std::ifstream&& file);
 
 	public:
-		INIParser(const std::string_view& fileName);
+		INIParser(const std::string_view& filename);
 
-		INIParser(const std::filesystem::path& fileName);
+		INIParser(const std::filesystem::path& filename);
 
 		INIParser(std::ifstream&& file) noexcept;
 

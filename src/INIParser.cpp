@@ -83,14 +83,14 @@ namespace utility
 		}
 	}
 
-	INIParser::INIParser(const string_view& fileName)
+	INIParser::INIParser(const string_view& filename)
 	{
-		this->parse(ifstream(fileName));
+		this->parse(ifstream(filename));
 	}
 
-	INIParser::INIParser(const filesystem::path& fileName)
+	INIParser::INIParser(const filesystem::path& filename)
 	{
-		this->parse(ifstream(fileName));
+		this->parse(ifstream(filename));
 	}
 
 	INIParser::INIParser(ifstream&& file) noexcept
