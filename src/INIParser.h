@@ -4,16 +4,20 @@
 #include <string>
 #include <filesystem>
 #include <fstream>
-#include <string_view>
 
 namespace utility
 {
 	class INIParser
 	{
 	public:
-		using iniStructure = std::unordered_map<std::string, std::unordered_multimap<std::string, std::string>>;	//section name - key(name=value)
-		using iniMapStructure = std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_multimap<std::string, std::string>>>;	//section name - map of maps
-		using iniMapStructureGetStruct = std::pair<std::unordered_map<std::string, std::string>::const_iterator, std::unordered_map<std::string, std::string>::const_iterator>;	//std::unordered_multimap.equal_range()
+		// section name - key(name=value)
+		using iniStructure = std::unordered_map<std::string, std::unordered_multimap<std::string, std::string>>;
+
+		// section name - map of maps
+		using iniMapStructure = std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_multimap<std::string, std::string>>>;
+
+		// std::unordered_multimap.equal_range()
+		using iniMapStructureGetStruct = std::pair<std::unordered_map<std::string, std::string>::const_iterator, std::unordered_map<std::string, std::string>::const_iterator>;
 
 	private:
 		iniStructure data;
@@ -23,11 +27,15 @@ namespace utility
 		void parse(std::ifstream&& file);
 
 	public:
-		INIParser(const std::string_view& filename);
+		/// @brief Parse .ini file from path
+		/// @param filePath Path to .ini file
+		/// @exception std::runtime_error
+		INIParser(const std::filesystem::path& filePath);
 
-		INIParser(const std::filesystem::path& filename);
-
-		INIParser(std::ifstream&& file) noexcept;
+		/// @brief Parse .ini file from std::ifstream
+		/// @param file File input streams
+		/// @exception std::runtime_error
+		INIParser(std::ifstream&& file);
 
 		const iniStructure& getData() const;
 

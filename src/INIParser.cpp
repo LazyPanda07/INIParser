@@ -83,18 +83,23 @@ namespace utility
 		}
 	}
 
-	INIParser::INIParser(const string_view& filename)
+	INIParser::INIParser(const filesystem::path& filePath)
 	{
-		this->parse(ifstream(filename));
+		if (!filesystem::exists(filePath))
+		{
+			throw runtime_error("Path " + filePath.string() + " doesn't exist");
+		}
+
+		this->parse(ifstream(filePath));
 	}
 
-	INIParser::INIParser(const filesystem::path& filename)
+	INIParser::INIParser(ifstream&& file)
 	{
-		this->parse(ifstream(filename));
-	}
+		if (!file.is_open())
+		{
+			throw runtime_error("File is not open");
+		}
 
-	INIParser::INIParser(ifstream&& file) noexcept
-	{
 		this->parse(move(file));
 	}
 
