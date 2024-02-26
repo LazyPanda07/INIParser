@@ -5,9 +5,6 @@
 #include <filesystem>
 #include <fstream>
 
-template<typename T>
-struct Converter;
-
 namespace utility
 {
 	class INIParser

@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "gtest/gtest.h"
 
 #include "INIParser.h"
