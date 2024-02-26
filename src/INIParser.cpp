@@ -4,10 +4,10 @@ using namespace std;
 
 namespace utility
 {
-	void INIParser::parse(ifstream&& stream)
+	void INIParser::parse(istream&& stream)
 	{
 		string tem;
-		unordered_map<string, string>* currentSection;
+		unordered_map<string, string>* currentSection = nullptr;
 
 		while (getline(stream, tem))
 		{
@@ -55,7 +55,12 @@ namespace utility
 				value.pop_back();
 			}
 
-			currentSection.emplace(move(key), move(value));
+			if (!currentSection)
+			{
+				throw runtime_error("No section");
+			}
+
+			currentSection->emplace(move(key), move(value));
 		}
 	}
 
@@ -78,9 +83,9 @@ namespace utility
 
 	INIParser::INIParser(istream&& inputStream)
 	{
-		if (!inputStream.is_open())
+		if (!inputStream.bad())
 		{
-			throw runtime_error("Stream is not open");
+			throw runtime_error("Bad stream");
 		}
 
 		this->parse(move(inputStream));
@@ -91,17 +96,17 @@ namespace utility
 		return data.at(sectionName).at(key);
 	}
 
-	const unordered_map<string, string>& operator[](const string& sectionName) const
+	const unordered_map<string, string>& INIParser::operator[](const string& sectionName) const
 	{
 		return data.at(sectionName);
 	}
 
-	iniStructure::const_iterator INIParser::begin() const noexcept
+	INIParser::iniStructure::const_iterator INIParser::begin() const noexcept
 	{
 		return data.begin();
 	}
 
-	iniStructure::const_iterator INIParser::end() const noexcept
+	INIParser::iniStructure::const_iterator INIParser::end() const noexcept
 	{
 		return data.end();
 	}
