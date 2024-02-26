@@ -5,49 +5,64 @@
 #include <filesystem>
 #include <fstream>
 
+template<typename T>
+struct Converter;
+
 namespace utility
 {
 	class INIParser
 	{
 	public:
-		// section name - key(name=value)
-		using iniStructure = std::unordered_map<std::string, std::unordered_multimap<std::string, std::string>>;
-
-		// section name - map of maps
-		using iniMapStructure = std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_multimap<std::string, std::string>>>;
-
-		// std::unordered_multimap.equal_range()
-		using iniMapStructureGetStruct = std::pair<std::unordered_map<std::string, std::string>::const_iterator, std::unordered_map<std::string, std::string>::const_iterator>;
+		/**
+		* section name - (key - value)
+		*/
+		using iniStructure = std::unordered_map<std::string, std::unordered_map<std::string, std::string>>;
 
 	private:
 		iniStructure data;
-		iniMapStructure mapData;
 
 	private:
-		void parse(std::ifstream&& file);
+		void parse(std::istream&& stream);
 
 	public:
-		/// @brief Parse .ini file from path
-		/// @param filePath Path to .ini file
-		/// @exception std::runtime_error
+		static std::string getVersion();
+
+	public:
+		/**
+		* @brief Parse .ini file from path
+		* @param filePath Path to .ini file
+		* @exception std::runtime_error
+		*/
 		INIParser(const std::filesystem::path& filePath);
 
-		/// @brief Parse .ini file from std::ifstream
-		/// @param file File input streams
-		/// @exception std::runtime_error
-		INIParser(std::ifstream&& file);
+		/**
+		* @brief Parse from std::istream
+		* @param inputStream Input stream
+		* @exception std::runtime_error
+		*/
+		INIParser(std::istream&& inputStream);
 
-		const iniStructure& getData() const;
+		/**
+		* @brief Get value from specific section by key
+		* @exception std::out_of_range
+		*/
+		const std::string& getValue(const std::string& sectionName, const std::string& key) const;
 
-		const iniMapStructure& getMapData() const;
+		/**
+		* @brief Get section by name
+		* @exception std::out_of_range
+		*/
+		const std::unordered_map<std::string, std::string>& operator[](const std::string& sectionName) const;
 
-		const std::unordered_multimap<std::string, std::string>& getSectionData(const std::string& sectionName) const;
+		/**
+		* @brief Range-based for loop
+		*/
+		iniStructure::const_iterator begin() const noexcept;
 
-		const std::unordered_multimap<std::string, std::string>& getSectionMapData(const std::string& sectionName, const std::string& mapName) const;
-
-		std::string getKeyValueData(const std::string& sectionName, const std::string& keyName) const;
-
-		iniMapStructureGetStruct getKeyValueMapData(const std::string& sectionName, const std::string& mapName, const std::string& keyName) const;
+		/**
+		* @brief Range-based for loop
+		*/
+		iniStructure::const_iterator end() const noexcept;
 
 		INIParser() = default;
 	};

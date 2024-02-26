@@ -4,83 +4,66 @@ using namespace std;
 
 namespace utility
 {
-	void INIParser::parse(ifstream&& file)
+	void INIParser::parse(ifstream&& stream)
 	{
-		string sectionName;
 		string tem;
+		unordered_map<string, string>* currentSection;
 
-		while (getline(file, tem))
+		while (getline(stream, tem))
 		{
-			size_t isStringValue = tem.find('\"');
-			string key;
-			string value;
-
-			if (isStringValue == string::npos)
-			{
-				tem.erase(remove_if(tem.begin(), tem.end(), [](const char& c) { return isspace(static_cast<unsigned char>(c)); }), tem.end());
-			}
-			else
-			{
-				tem.erase(remove_if(tem.begin(), tem.begin() + tem.find('\"'), [](const char& c) {return isspace(c); }), tem.begin() + tem.find('\"'));
-
-				tem.erase(remove(tem.begin(), tem.end(), '\"'), tem.end());
-			}
-
 			if (tem.empty())
 			{
 				continue;
 			}
-			else
+			else if (tem[0] == '[')
 			{
-				switch (tem[0])
-				{
-				case ';':
-				case '#':
-					continue;
-
-					break;
-
-				case '[':
-					sectionName = string(tem.begin() + 1, tem.end() - 1);
-
-					break;
-
-				default:
-					key = tem.substr(0, tem.find('='));
-					value = tem.substr(tem.find('=') + 1);
-
-					{
-						size_t isMap = key.find('[');
-
-						if (isMap != string::npos)
-						{
-							if (key[isMap + 1] != ']')
-							{
-								string mapName(key.begin(), key.begin() + isMap);
-								
-								key.erase(key.begin(), key.begin() + isMap + 1);
-
-								key.pop_back();
-
-								mapData[sectionName][mapName].emplace(move(key), move(value));
-
-								continue;
-							}
-							else
-							{
-								key.pop_back();
-
-								key.pop_back();
-							}
-						}
-					}
-
-					data[sectionName].emplace(make_pair(move(key), move(value)));
-
-					break;
-				}
+				currentSection = &data[string(tem.begin() + 1, tem.end() - 1)];
+				
+				continue;
 			}
+			else if (tem[0] == ';' || tem[0] == '#')
+			{
+				continue;
+			}
+
+			string key;
+			string value;
+			string* current = &key;
+
+			for (char c : tem)
+			{
+				if (c == '=')
+				{
+					if (current != &value)
+					{
+						current = &value;
+
+						continue;
+					}
+				}
+
+				*current += c;
+			}
+
+			while (key.back() == ' ')
+			{
+				key.pop_back();
+			}
+
+			while (value.back() == ' ')
+			{
+				value.pop_back();
+			}
+
+			currentSection.emplace(move(key), move(value));
 		}
+	}
+
+	string INIParser::getVersion()
+	{
+		string version = "1.0.0";
+
+		return version;
 	}
 
 	INIParser::INIParser(const filesystem::path& filePath)
@@ -93,43 +76,33 @@ namespace utility
 		this->parse(ifstream(filePath));
 	}
 
-	INIParser::INIParser(ifstream&& file)
+	INIParser::INIParser(istream&& inputStream)
 	{
-		if (!file.is_open())
+		if (!inputStream.is_open())
 		{
-			throw runtime_error("File is not open");
+			throw runtime_error("Stream is not open");
 		}
 
-		this->parse(move(file));
+		this->parse(move(inputStream));
 	}
 
-	const INIParser::iniStructure& INIParser::getData() const
+	const string& INIParser::getValue(const string& sectionName, const string& key) const
 	{
-		return data;
+		return data.at(sectionName).at(key);
 	}
 
-	const INIParser::iniMapStructure& INIParser::getMapData() const
-	{
-		return mapData;
-	}
-
-	const unordered_multimap<string, string>& INIParser::getSectionData(const string& sectionName) const
+	const unordered_map<string, string>& operator[](const string& sectionName) const
 	{
 		return data.at(sectionName);
 	}
 
-	const unordered_multimap<string, string>& INIParser::getSectionMapData(const string& sectionName, const string& mapName) const
+	iniStructure::const_iterator INIParser::begin() const noexcept
 	{
-		return mapData.at(sectionName).at(mapName);
+		return data.begin();
 	}
 
-	string INIParser::getKeyValueData(const string& sectionName, const string& keyName) const
+	iniStructure::const_iterator INIParser::end() const noexcept
 	{
-		return data.find(sectionName)->second.find(keyName)->second;
-	}
-
-	INIParser::iniMapStructureGetStruct INIParser::getKeyValueMapData(const string& sectionName, const string& mapName, const string& keyName) const
-	{
-		return mapData.at(sectionName).at(mapName).equal_range(keyName);
+		return data.end();
 	}
 }
