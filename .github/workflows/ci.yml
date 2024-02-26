@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
+        shared: [[ON, DLL], [OFF, ""]]
 
     steps:
     - uses: actions/checkout@v4
@@ -23,21 +24,22 @@ jobs:
       run: |
           mkdir build
           cd build
-          cmake -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -G "NMake Makefiles" ..
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DBUILD_SHARED_LIBS=${{ matrix.shared[0] }} -G "NMake Makefiles" ..
           nmake install
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         path: build/install-dir
-        name: ${{ matrix.configuration }}_Windows
+        name: ${{ matrix.configuration }}${{ matrix.shared[1] }}_Windows
 
     
   linux-build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        configuration: [Debug, Release]  
+        configuration: [Debug, Release]
+        shared: [[ON, DLL], [OFF, ""]]
 
     steps:
     - uses: actions/checkout@v4
@@ -46,14 +48,14 @@ jobs:
       run: |
           mkdir build
           cd build
-          cmake -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} ..
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DBUILD_SHARED_LIBS=${{ matrix.shared[0] }} ..
           make install -j $(nproc)
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         path: build/install-dir
-        name: ${{ matrix.configuration }}_Linux
+        name: ${{ matrix.configuration }}${{ matrix.shared[1] }}_Linux
 
     
   windows-tests:
@@ -62,6 +64,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
+        shared: [[ON, DLL], [OFF, ""]]
 
     steps:
     - uses: actions/checkout@v4
@@ -70,7 +73,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         path: INIParser
-        name: ${{ matrix.configuration }}_Windows
+        name: ${{ matrix.configuration }}${{ matrix.shared[1] }}_Windows
 
     - name: Get Google Test
       uses: LazyPanda07/get-gtest@v1
@@ -102,6 +105,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
+        shared: [[ON, DLL], [OFF, ""]]
 
     steps:
     - uses: actions/checkout@v4
@@ -110,7 +114,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         path: INIParser
-        name: ${{ matrix.configuration }}_Linux
+        name: ${{ matrix.configuration }}${{ matrix.shared[1] }}_Linux
 
     - name: Get Google Test
       uses: LazyPanda07/get-gtest@v1
@@ -129,7 +133,7 @@ jobs:
       working-directory: Tests
       run: |
           cd build/bin
-          ./Tests
+          export LD_LIBRARY_PATH=$(pwd):${LD_LIBRARY_PATH} ./Tests
 
   
   memory-leak-tests:
@@ -138,6 +142,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
+        shared: [[ON, DLL], [OFF, ""]]
 
     steps:
     - uses: actions/checkout@v4
@@ -146,7 +151,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         path: INIParser
-        name: ${{ matrix.configuration }}_Linux
+        name: ${{ matrix.configuration }}${{ matrix.shared[1] }}_Linux
 
     - name: Get Google Test
       uses: LazyPanda07/get-gtest@v1
@@ -166,6 +171,7 @@ jobs:
       with:
         path: Tests/build/bin
         name: Tests
+        pre-execute: export LD_LIBRARY_PATH=$(pwd):${LD_LIBRARY_PATH}
 
   
   publish:

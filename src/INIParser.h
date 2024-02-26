@@ -5,9 +5,19 @@
 #include <filesystem>
 #include <fstream>
 
+#ifdef INI_PARSER_DLL
+#ifdef __LINUX__
+#define INI_PARSER_API __attribute__((visibility("default")))
+#else
+#define INI_PARSER_API __declspec(dllexport)
+#endif
+#else
+#define INI_PARSER_API
+#endif
+
 namespace utility
 {
-	class INIParser
+	class INI_PARSER_API INIParser
 	{
 	public:
 		/**
@@ -22,6 +32,9 @@ namespace utility
 		void parse(std::istream&& stream);
 
 	public:
+		/**
+		 * @brief Get version on INIParser
+		 */
 		static std::string getVersion();
 
 	public:

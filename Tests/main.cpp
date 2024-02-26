@@ -27,7 +27,7 @@ TEST(INI, Parse)
 	ASSERT_EQ(parser.getValue("EditoronlyBP", "bBlueprintIsNotBlueprintType"), "true");
 }
 
-TEST(INI, ForBasedRangeLoop)
+TEST(INI, RangeBasedForLoop)
 {
 	std::unordered_set<std::string> sections =
 	{
