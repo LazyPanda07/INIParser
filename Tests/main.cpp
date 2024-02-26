@@ -16,7 +16,7 @@ bDontLoadBlueprintOutsideEditor= true
 bBlueprintIsNotBlueprintType= true
 )";
 
-	utility::INIParser parser(std::istringstream(data));
+    utility::INIParser parser = std::istringstream(data);
 
     ASSERT_EQ(parser.getValue("UnrealEd.SimpleMap", "SimpleMapName"), "/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap");
 
