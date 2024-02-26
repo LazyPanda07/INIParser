@@ -83,7 +83,7 @@ namespace utility
 
 	INIParser::INIParser(istream&& inputStream)
 	{
-		if (!inputStream.bad())
+		if (inputStream.bad())
 		{
 			throw runtime_error("Bad stream");
 		}
