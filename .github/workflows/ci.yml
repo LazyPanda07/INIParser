@@ -133,7 +133,7 @@ jobs:
       working-directory: Tests
       run: |
           cd build/bin
-          export LD_LIBRARY_PATH=$(pwd):${LD_LIBRARY_PATH} ./Tests
+          LD_LIBRARY_PATH=$(pwd):${LD_LIBRARY_PATH} ./Tests
 
   
   memory-leak-tests:

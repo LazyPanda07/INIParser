@@ -13,11 +13,15 @@ bAllowClassAndBlueprintPinMatching=true
 bReplaceBlueprintWithClass= true
 bDontLoadBlueprintOutsideEditor= true
 bBlueprintIsNotBlueprintType= true
+
+[Test]
+intValue=5
+doubleValue=32.2
 )";
 
 TEST(INI, Parse)
 {
-	utility::INIParser parser = std::istringstream(data);
+	utility::ini::INIParser parser = std::istringstream(data);
 
 	ASSERT_EQ(parser.getValue("UnrealEd.SimpleMap", "SimpleMapName"), "/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap");
 
@@ -25,6 +29,9 @@ TEST(INI, Parse)
 	ASSERT_EQ(parser.getValue("EditoronlyBP", "bReplaceBlueprintWithClass"), "true");
 	ASSERT_EQ(parser.getValue("EditoronlyBP", "bDontLoadBlueprintOutsideEditor"), "true");
 	ASSERT_EQ(parser.getValue("EditoronlyBP", "bBlueprintIsNotBlueprintType"), "true");
+
+	ASSERT_EQ(parser.getValue("Test", "intValue"), "5");
+	ASSERT_EQ(parser.getValue("Test", "doubleValue"), "32.2");
 }
 
 TEST(INI, RangeBasedForLoop)
@@ -32,7 +39,8 @@ TEST(INI, RangeBasedForLoop)
 	std::unordered_set<std::string> sections =
 	{
 		"UnrealEd.SimpleMap",
-		"EditoronlyBP"
+		"EditoronlyBP",
+		"Test"
 	};
 	std::unordered_set<std::string> keys =
 	{
@@ -40,14 +48,18 @@ TEST(INI, RangeBasedForLoop)
 		"bAllowClassAndBlueprintPinMatching",
 		"bReplaceBlueprintWithClass",
 		"bDontLoadBlueprintOutsideEditor",
-		"bBlueprintIsNotBlueprintType"
+		"bBlueprintIsNotBlueprintType",
+		"intValue",
+		"doubleValue"
 	};
 	std::unordered_set<std::string> values =
 	{
 		"/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap",
-		"true"
+		"true",
+		"5",
+		"32.2"
 	};
-	utility::INIParser parser = std::istringstream(data);
+	utility::ini::INIParser parser = std::istringstream(data);
 
 	for (const auto& [sectionName, section] : parser)
 	{
@@ -60,6 +72,17 @@ TEST(INI, RangeBasedForLoop)
 			ASSERT_TRUE(values.count(value));
 		}
 	}
+}
+
+TEST(INI, GetAs)
+{
+	utility::ini::INIParser parser = std::istringstream(data);
+
+	ASSERT_TRUE(parser.getAs<bool>("EditoronlyBP", bAllowClassAndBlueprintPinMatching));
+	ASSERT_TRUE(parser.getAs<bool>("Test", doubleValue));
+	ASSERT_EQ(parser.getAs<int>("Test", "intValue"), 5);
+	ASSERT_EQ(parser.getAs<double>("Test", "doubleValue"), 32.2);
+	ASSERT_EQ(parser.getAs<std::string>("EditoronlyBP", "bAllowClassAndBlueprintPinMatching"), true);
 }
 
 int main(int argc, char** argv)
