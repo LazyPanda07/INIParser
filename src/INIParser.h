@@ -78,7 +78,7 @@ namespace utility
 			*/
 			iniStructure::const_iterator end() const noexcept;
 
-			template<typename ResultT, typename T = DefaultINIConverter>
+			template<typename ResultT, typename T = DefaultINIConverter<ResultT>>
 			ResultT getAs(const std::string& sectionName, const std::string& key) const requires(INIConverter<T, ResultT>);
 
 			INIParser() = default;
@@ -90,7 +90,7 @@ namespace utility
 {
 	namespace ini
 	{
-		template<typename ResultT, typename T = DefaultINIConverter>
+		template<typename ResultT, typename T>
 		ResultT INIParser::getAs(const std::string& sectionName, const std::string& key) const requires(INIConverter<T, ResultT>)
 		{
 			return static_cast<ResultT>(T().convert(this->getValue(sectionName, key)));
