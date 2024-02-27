@@ -82,7 +82,7 @@ TEST(INI, GetAs)
 	ASSERT_TRUE(parser.getAs<bool>("Test", "doubleValue"));
 	ASSERT_EQ(parser.getAs<int>("Test", "intValue"), 5);
 	ASSERT_EQ(parser.getAs<double>("Test", "doubleValue"), 32.2);
-	ASSERT_EQ(parser.getAs<std::string>("EditoronlyBP", "bAllowClassAndBlueprintPinMatching"), true);
+	ASSERT_EQ(parser.getAs<std::string>("EditoronlyBP", "bAllowClassAndBlueprintPinMatching"), "true");
 }
 
 int main(int argc, char** argv)
