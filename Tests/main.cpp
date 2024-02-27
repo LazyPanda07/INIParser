@@ -78,8 +78,8 @@ TEST(INI, GetAs)
 {
 	utility::ini::INIParser parser = std::istringstream(data);
 
-	ASSERT_TRUE(parser.getAs<bool>("EditoronlyBP", bAllowClassAndBlueprintPinMatching));
-	ASSERT_TRUE(parser.getAs<bool>("Test", doubleValue));
+	ASSERT_TRUE(parser.getAs<bool>("EditoronlyBP", "bAllowClassAndBlueprintPinMatching"));
+	ASSERT_TRUE(parser.getAs<bool>("Test", "doubleValue"));
 	ASSERT_EQ(parser.getAs<int>("Test", "intValue"), 5);
 	ASSERT_EQ(parser.getAs<double>("Test", "doubleValue"), 32.2);
 	ASSERT_EQ(parser.getAs<std::string>("EditoronlyBP", "bAllowClassAndBlueprintPinMatching"), true);
