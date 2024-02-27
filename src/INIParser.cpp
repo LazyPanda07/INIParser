@@ -8,6 +8,18 @@ namespace utility
 	{
 		string tem;
 		unordered_map<string, string>* currentSection = nullptr;
+		auto removeSpaces = [](string& source)
+		{
+			while (isspace(source.front()))
+			{
+				source.pop_front();
+			}
+
+			while (isspace(source.back()))
+			{
+				source.pop_back();
+			}
+		};
 
 		while (getline(stream, tem))
 		{
@@ -45,15 +57,8 @@ namespace utility
 				*current += c;
 			}
 
-			while (key.back() == ' ')
-			{
-				key.pop_back();
-			}
-
-			while (value.back() == ' ')
-			{
-				value.pop_back();
-			}
+			removeSpaces(key);
+			removeSpaces(value);
 
 			if (!currentSection)
 			{
