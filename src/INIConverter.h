@@ -21,7 +21,7 @@ namespace utility
         {
             inline bool convert(const std::string& value) const
             {
-                using namespace std::string_literals;
+                using namespace std::string_view_literals;
 
                 static constexpr size_t trueSize = 4;
                 static constexpr size_t falseSize = 5;
