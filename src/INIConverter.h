@@ -1,3 +1,6 @@
+#pragma once
+
+#if defined(__cpp_concepts) && __cpp_concepts
 #include <concepts>
 #include <string>
 #include <cctype>
@@ -93,3 +96,4 @@ namespace utility
         };
     }
 }
+#endif

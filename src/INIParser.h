@@ -78,14 +78,17 @@ namespace utility
 			*/
 			iniStructure::const_iterator end() const noexcept;
 
+#if defined(__cpp_concepts) && __cpp_concepts
 			template<typename ResultT, typename T = DefaultINIConverter<ResultT>>
 			ResultT getAs(const std::string& sectionName, const std::string& key) const requires(INIConverter<T, ResultT>);
+#endif
 
 			INIParser() = default;
 		};
 	}
 }
 
+#if defined(__cpp_concepts) && __cpp_concepts
 namespace utility
 {
 	namespace ini
@@ -97,3 +100,4 @@ namespace utility
 		}
 	}
 }
+#endif

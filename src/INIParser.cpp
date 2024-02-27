@@ -4,126 +4,129 @@ using namespace std;
 
 namespace utility
 {
-	void INIParser::parse(istream&& stream)
+	namespace ini
 	{
-		string tem;
-		unordered_map<string, string>* currentSection = nullptr;
-		auto removeSpaces = [](string& source)
+		void INIParser::parse(istream&& stream)
 		{
-			size_t spaces = 0;
-
-			for (char c : source)
+			string tem;
+			unordered_map<string, string>* currentSection = nullptr;
+			auto removeSpaces = [](string& source)
 			{
-				if (isspace(c))
+				size_t spaces = 0;
+
+				for (char c : source)
 				{
-					spaces++;
-				}
-				else
-				{
-					break;
-				}
-			}
-
-			source.erase(0, spaces);
-
-			while (isspace(source.back()))
-			{
-				source.pop_back();
-			}
-		};
-
-		while (getline(stream, tem))
-		{
-			if (tem.empty())
-			{
-				continue;
-			}
-			else if (tem[0] == '[')
-			{
-				currentSection = &data[string(tem.begin() + 1, tem.end() - 1)];
-				
-				continue;
-			}
-			else if (tem[0] == ';' || tem[0] == '#')
-			{
-				continue;
-			}
-
-			string key;
-			string value;
-			string* current = &key;
-
-			for (char c : tem)
-			{
-				if (c == '=')
-				{
-					if (current != &value)
+					if (isspace(c))
 					{
-						current = &value;
-
-						continue;
+						spaces++;
+					}
+					else
+					{
+						break;
 					}
 				}
 
-				*current += c;
-			}
+				source.erase(0, spaces);
 
-			removeSpaces(key);
-			removeSpaces(value);
+				while (isspace(source.back()))
+				{
+					source.pop_back();
+				}
+			};
 
-			if (!currentSection)
+			while (getline(stream, tem))
 			{
-				throw runtime_error("No section");
+				if (tem.empty())
+				{
+					continue;
+				}
+				else if (tem[0] == '[')
+				{
+					currentSection = &data[string(tem.begin() + 1, tem.end() - 1)];
+					
+					continue;
+				}
+				else if (tem[0] == ';' || tem[0] == '#')
+				{
+					continue;
+				}
+
+				string key;
+				string value;
+				string* current = &key;
+
+				for (char c : tem)
+				{
+					if (c == '=')
+					{
+						if (current != &value)
+						{
+							current = &value;
+
+							continue;
+						}
+					}
+
+					*current += c;
+				}
+
+				removeSpaces(key);
+				removeSpaces(value);
+
+				if (!currentSection)
+				{
+					throw runtime_error("No section");
+				}
+
+				currentSection->emplace(move(key), move(value));
+			}
+		}
+
+		string INIParser::getVersion()
+		{
+			string version = "1.0.0";
+
+			return version;
+		}
+
+		INIParser::INIParser(const filesystem::path& filePath)
+		{
+			if (!filesystem::exists(filePath))
+			{
+				throw runtime_error("Path " + filePath.string() + " doesn't exist");
 			}
 
-			currentSection->emplace(move(key), move(value));
+			this->parse(ifstream(filePath));
 		}
-	}
 
-	string INIParser::getVersion()
-	{
-		string version = "1.0.0";
-
-		return version;
-	}
-
-	INIParser::INIParser(const filesystem::path& filePath)
-	{
-		if (!filesystem::exists(filePath))
+		INIParser::INIParser(istream&& inputStream)
 		{
-			throw runtime_error("Path " + filePath.string() + " doesn't exist");
+			if (inputStream.bad())
+			{
+				throw runtime_error("Bad stream");
+			}
+
+			this->parse(move(inputStream));
 		}
 
-		this->parse(ifstream(filePath));
-	}
-
-	INIParser::INIParser(istream&& inputStream)
-	{
-		if (inputStream.bad())
+		const string& INIParser::getValue(const string& sectionName, const string& key) const
 		{
-			throw runtime_error("Bad stream");
+			return data.at(sectionName).at(key);
 		}
 
-		this->parse(move(inputStream));
-	}
+		const unordered_map<string, string>& INIParser::operator[](const string& sectionName) const
+		{
+			return data.at(sectionName);
+		}
 
-	const string& INIParser::getValue(const string& sectionName, const string& key) const
-	{
-		return data.at(sectionName).at(key);
-	}
+		INIParser::iniStructure::const_iterator INIParser::begin() const noexcept
+		{
+			return data.begin();
+		}
 
-	const unordered_map<string, string>& INIParser::operator[](const string& sectionName) const
-	{
-		return data.at(sectionName);
-	}
-
-	INIParser::iniStructure::const_iterator INIParser::begin() const noexcept
-	{
-		return data.begin();
-	}
-
-	INIParser::iniStructure::const_iterator INIParser::end() const noexcept
-	{
-		return data.end();
+		INIParser::iniStructure::const_iterator INIParser::end() const noexcept
+		{
+			return data.end();
+		}
 	}
 }
