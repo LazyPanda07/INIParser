@@ -54,7 +54,7 @@ namespace utility
                     return defaultConvert();
                 }
             }
-        }
+        };
 
         template<>
         struct DefaultINIConverter<int>
@@ -63,7 +63,16 @@ namespace utility
             {
                 return std::stoi(value);
             }
-        }
+        };
+
+        template<>
+        struct DefaultINIConverter<int64_t>
+        {
+            inline int64_t convert(const std::string& value) const
+            {
+                return std::stoll(value);
+            }
+        };
 
         template<>
         struct DefaultINIConverter<std::string>
@@ -72,7 +81,7 @@ namespace utility
             {
                 return value;
             }
-        }
+        };
 
         template<>
         struct DefaultINIConverter<double>
@@ -81,6 +90,6 @@ namespace utility
             {
                 return std::stod(value);
             }
-        }
+        };
     }
 }
