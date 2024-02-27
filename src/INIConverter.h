@@ -36,7 +36,7 @@ namespace utility
                             return std::tolower(static_cast<uint8_t>(leftChar)) == std::tolower(static_cast<uint8_t>(rightChar));
                         }
                     );
-                }
+                };
                 auto defaultConvert = [&value]() -> bool
                 {
                     return static_cast<bool>(std::stod(value));
