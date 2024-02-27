@@ -10,10 +10,21 @@ namespace utility
 		unordered_map<string, string>* currentSection = nullptr;
 		auto removeSpaces = [](string& source)
 		{
-			while (isspace(source.front()))
+			size_t spaces = 0;
+
+			for (char c : source)
 			{
-				source.pop_front();
+				if (isspace(c))
+				{
+					spaces++;
+				}
+				else
+				{
+					break;
+				}
 			}
+
+			source.erase(0, spaces);
 
 			while (isspace(source.back()))
 			{
