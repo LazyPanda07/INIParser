@@ -432,6 +432,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\INIConverter.h" />
     <ClInclude Include="src\INIParser.h" />
   </ItemGroup>
   <ItemGroup>

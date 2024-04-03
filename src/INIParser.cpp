@@ -84,7 +84,7 @@ namespace utility
 
 		string INIParser::getVersion()
 		{
-			string version = "1.0.0";
+			string version = "1.0.1";
 
 			return version;
 		}

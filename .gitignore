@@ -33,7 +33,8 @@
 
 # VS folders
 .vs/
-bin/
 
-# Other VS files
-*.sln
+# Binaries
+bin/
+build/
+out/
