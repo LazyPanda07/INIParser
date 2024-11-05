@@ -78,13 +78,13 @@ namespace utility
 					throw runtime_error("No section");
 				}
 
-				currentSection->emplace(move(key), move(value));
+				currentSection->try_emplace(move(key), move(value));
 			}
 		}
 
 		string INIParser::getVersion()
 		{
-			string version = "1.0.1";
+			string version = "1.0.2";
 
 			return version;
 		}
