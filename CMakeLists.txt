@@ -12,12 +12,16 @@ if (${BUILD_SHARED_LIBS})
 	add_definitions(-DINI_PARSER_DLL)
 endif ()
 
-project(INIParser VERSION 1.0.2)
+project(INIParser VERSION 1.1.0)
 
 add_library(
 	${PROJECT_NAME}
 	src/INIParser.cpp
 )
+
+if (DEFINED ENV{MARCH} AND NOT "$ENV{MARCH}" STREQUAL "")
+	target_compile_options(${PROJECT_NAME} PRIVATE -march=$ENV{MARCH})
+endif()
 
 install(
 	TARGETS ${PROJECT_NAME}
