@@ -131,6 +131,8 @@ jobs:
     
   linux-tests:
     runs-on: ubuntu-latest
+    container:
+      image: lazypanda07/ubuntu_cxx20:aarch64
     needs: linux-build
     strategy:
       matrix:
@@ -145,11 +147,6 @@ jobs:
       with:
         path: INIParser
         name: ${{ matrix.configuration }}${{ matrix.shared[1] }}_Linux
-
-    - name: Get Google Test
-      uses: LazyPanda07/get-gtest@v1
-      with:
-        install-path: Tests/gtest
 
     - name: Build tests
       working-directory: Tests
@@ -184,11 +181,6 @@ jobs:
       with:
         path: INIParser
         name: ${{ matrix.configuration }}${{ matrix.shared[1] }}_LinuxARM
-
-    - name: Get Google Test
-      uses: LazyPanda07/get-gtest@v1
-      with:
-        install-path: Tests/gtest
 
     - name: Build tests
       working-directory: Tests
@@ -244,7 +236,7 @@ jobs:
 
   
   publish:
-    needs: [windows-tests, linux-tests, memory-leak-tests]
+    needs: [windows-tests, linux-tests, linux-aarch64-tests, memory-leak-tests]
     runs-on: ubuntu-latest
 
     steps:
