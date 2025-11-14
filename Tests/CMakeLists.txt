@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.27.0)
 set(CMAKE_CXX_STANDARD 20)
 set(GTEST_VERSION 1.17.0)
 set(DLL ${CMAKE_SOURCE_DIR}/../INIParser)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
 
 if (UNIX)
 	set(DLL ${DLL}/lib/libINIParser.so)
@@ -49,4 +50,4 @@ target_link_libraries(
 	gtest_main
 )
 
-install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_BINARY_DIR}/bin)
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
