@@ -213,12 +213,7 @@ jobs:
       with:
         path: INIParser
         name: ${{ matrix.configuration }}${{ matrix.shared[1] }}_Linux
-
-    - name: Get Google Test
-      uses: LazyPanda07/get-gtest@v1
-      with:
-        install-path: Tests/gtest
-
+        
     - name: Build tests
       working-directory: Tests
       run: |
