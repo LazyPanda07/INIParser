@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\INIParser.h">
+    <ClInclude Include="include\INIParser.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\INIConverter.h">
+    <ClInclude Include="include\INIConverter.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

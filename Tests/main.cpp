@@ -1,7 +1,7 @@
 #include <sstream>
 #include <unordered_set>
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "INIParser.h"
 
