@@ -80,7 +80,7 @@ namespace utility::ini
 
 	std::string INIParser::getVersion()
 	{
-		std::string version = "1.2.0";
+		std::string version = "1.2.1";
 
 		return version;
 	}
@@ -102,7 +102,7 @@ namespace utility::ini
 			throw std::runtime_error("Bad stream");
 		}
 
-		this->parse(move(inputStream));
+		this->parse(std::move(inputStream));
 	}
 
 	const std::string& INIParser::getValue(const std::string& sectionName, const std::string& key) const
@@ -110,7 +110,7 @@ namespace utility::ini
 		return data.at(sectionName).at(key);
 	}
 
-	const std::unordered_map<std::string, std::string>& INIParser::operator[](const std::string& sectionName) const
+	const std::unordered_map<std::string, std::string>& INIParser::operator [](const std::string& sectionName) const
 	{
 		return data.at(sectionName);
 	}

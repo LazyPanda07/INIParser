@@ -64,7 +64,7 @@ namespace utility::ini
 		* @brief Get section by name
 		* @exception std::out_of_range
 		*/
-		const std::unordered_map<std::string, std::string>& operator[](const std::string& sectionName) const;
+		const std::unordered_map<std::string, std::string>& operator [](const std::string& sectionName) const;
 
 		/**
 		* @brief Range-based for loop

@@ -11,7 +11,7 @@ if (${BUILD_SHARED_LIBS})
 	add_definitions(-DINI_PARSER_DLL)
 endif ()
 
-project(INIParser VERSION 1.2.0)
+project(INIParser VERSION 1.2.1)
 
 add_library(
 	${PROJECT_NAME}
